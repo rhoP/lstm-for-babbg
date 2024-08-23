@@ -28,7 +28,7 @@ class bbgLSTM(nn.Module):
         hidden, state = self.init_hidden(batch.shape[-2])
         outputs = []
         output = [] # just a placeholder
-        if batch.ndim<3: #Unnecessary but I like to be extra
+        if batch.ndim < 3: #Unnecessary but I like to be extra
             raise Exception("Danger, Danger Will Robinson")
         elif batch.shape[0] > 1:
             steps = range(batch.shape[0] - 1)
@@ -37,12 +37,12 @@ class bbgLSTM(nn.Module):
         
 
         for step in steps:
-            output, (hidden, c) = self.lstm(batch[step, :, :], (hidden, state))
+            output, (hidden, state) = self.lstm(batch[step, :, :], (hidden, state))
         
         outputs.append(output)
         
         for step in steps:
-            output, (hidden, c) = self.lstm(output, (hidden, state))
+            output, (hidden, state) = self.lstm(output, (hidden, state))
             outputs.append(output)
         
         return outputs
