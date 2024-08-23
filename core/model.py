@@ -30,12 +30,16 @@ class bbgLSTM(nn.Module):
         output = [] # just a placeholder
         if batch.ndim<3: #Unnecessary but I like to be extra
             raise Exception("Danger, Danger Will Robinson")
+        elif batch.shape[0] > 1:
+            steps = range(batch.shape[0] - 1)
         else:
-            steps = range(batch.shape[0])
+            raise Exception("ya done effed up, kid")
         
 
         for step in steps:
             output, (hidden, c) = self.lstm(batch[step, :, :], (hidden, state))
+        
+        outputs.append(output)
         
         for step in steps:
             output, (hidden, c) = self.lstm(output, (hidden, state))
